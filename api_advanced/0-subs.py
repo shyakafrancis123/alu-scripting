@@ -1,16 +1,11 @@
 #!/usr/bin/python3
 """
-Defines a function that queries the Reddit API and returns
-the number of subscribers for a given subreddit.
+0-main
 """
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """
-    Returns the number of subscribers for a subreddit.
-    If the subreddit is invalid, returns 0.
-    """
     if not subreddit or not isinstance(subreddit, str):
         return 0
 
