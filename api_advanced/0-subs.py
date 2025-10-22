@@ -1,12 +1,32 @@
 #!/usr/bin/python3
 """
-0-main
+Defines a function that queries the Reddit API and returns
+the number of subscribers for a given subreddit.
 """
-import sys
+import requests
 
-if __name__ == '__main__':
-    number_of_subscribers = __import__('0-subs').number_of_subscribers
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        print("{:d}".format(number_of_subscribers(sys.argv[1])))
+
+def number_of_subscribers(subreddit):
+    """
+    Returns the number of subscribers for a subreddit.
+    If the subreddit is invalid, returns 0.
+    """
+    if not subreddit or not isinstance(subreddit, str):
+        return 0
+
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    headers = {"User-Agent": "python:alx.api_advanced:v1.0 (by /u/shyakafrancis123)"}
+
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False, timeout=10)
+    except requests.RequestException:
+        return 0
+
+    if response.status_code != 200:
+        return 0
+
+    try:
+        data = response.json().get("data", {})
+        return data.get("subscribers", 0)
+    except ValueError:
+        return 0
