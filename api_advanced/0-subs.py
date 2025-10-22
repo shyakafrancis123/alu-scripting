@@ -1,29 +1,22 @@
 #!/usr/bin/python3
 """
-Queries the Reddit API and returns the number of subscribers
-for a given subreddit.
+Return the number of subscribers for a subreddit.
 
 Prototype: def number_of_subscribers(subreddit)
 
-If the subreddit is invalid or an error occurs, returns 0.
+If the subreddit is invalid or an error occurs, return 0.
 
 Notes:
-- No authentication required.
-- Do not follow redirects for invalid subreddits (allow_redirects=False).
-- Use a custom User-Agent to avoid 429 Too Many Requests.
+- Uses the Reddit endpoint: /r/<subreddit>/about.json
+- Do not follow redirects (allow_redirects=False)
+- Provide a custom User-Agent to avoid rate limits
 """
-
 import requests
 
 
 def number_of_subscribers(subreddit):
     """
-    Return the number of subscribers for a subreddit.
-
-    subreddit (str): name of the subreddit (e.g. "python").
-
-    Returns:
-        int: total subscribers, or 0 if subreddit is invalid or on error.
+    Return total subscribers for a subreddit, or 0 on failure.
     """
     if not subreddit or not isinstance(subreddit, str):
         return 0
@@ -32,7 +25,8 @@ def number_of_subscribers(subreddit):
     headers = {"User-Agent": "python:0-subs:v1.0 (by /u/shyakafrancis123)"}
 
     try:
-        resp = requests.get(url, headers=headers, allow_redirects=False, timeout=10)
+        resp = requests.get(url, headers=headers,
+                            allow_redirects=False, timeout=10)
     except requests.RequestException:
         return 0
 
