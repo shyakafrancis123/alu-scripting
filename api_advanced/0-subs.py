@@ -1,22 +1,16 @@
 #!/usr/bin/python3
-"""
-0-main
-"""
+"""0-subs.py"""
+
 import requests
 
 
 def number_of_subscribers(subreddit):
-    if not subreddit or not isinstance(subreddit, str):
-        return 0
+    """Reddit subscribers"""
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {"User-Agent": "My-User-Agent"}
 
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {"User-Agent": "python:alu.api_advanced:v1.0 (by /u/shyakafrancis123)"}
-
-    try:
-        response = requests.get(url, headers=headers, allow_redirects=False, timeout=10)
-        if response.status_code != 200:
-            return 0
-        data = response.json().get("data", {})
-        return data.get("subscribers", 0)
-    except Exception:
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    if response.status_code != 200:
         return 0
+    else:
+        return response.json().get("data").get("subscribers")
